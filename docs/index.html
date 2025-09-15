@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dokumentation</title>
+  <base href="../"> <!-- så relative links/billeder i README virker fra /docs -->
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666;
+      --border: #e5e7eb;
+      --accent: #0d6efd;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-gap: 2rem;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 2;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    nav#toc {
+      position: sticky;
+      top: 4.25rem;
+      max-height: calc(100vh - 5rem);
+      overflow: auto;
+      border-right: 1px solid var(--border);
+      padding-right: 1rem;
+    }
+    nav#toc h2 {
+      margin-top: 0;
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    nav#toc ul {
+      list-style: none;
+      padding-left: 0.5rem;
+    }
+    nav#toc li {
+      margin: .25rem 0;
+    }
+    nav#toc a {
+      color: var(--fg);
+      text-decoration: none;
+    }
+    nav#toc a:hover { color: var(--accent); }
+    main {
+      min-width: 0; /* allow wrapping */
+    }
+    main img { max-width: 100%; height: auto; background: #fff; }
+    main pre {
+      overflow: auto;
+      background: #f6f8fa;
+      padding: .75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    main table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    main table th, main table td {
+      border: 1px solid var(--border);
+      padding: .5rem .6rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    main table th { background: #fafafa; }
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .loading { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dokumentation</h1>
+  </header>
+  <div class="container">
+    <nav id="toc">
+      <h2>Indhold</h2>
+      <div class="loading">Genererer indholdsfortegnelse…</div>
+    </nav>
+    <main id="content">
+      <p class="loading">Henter README.md…</p>
+    </main>
+  </div>
+  <div class="footer">
+    Genereret fra <code>README.md</code>. Baggrund er låst til hvid via lokal CSS. TOC bygges automatisk klient-side.
+  </div>
+
+  <!-- Marked.js (MIT) til Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    async function loadReadme() {
+      const res = await fetch('README.md'); // pga <base href="../"> svarer dette til ../README.md
+      if (!res.ok) {
+        document.querySelector('#content').innerHTML = '<p>Kunne ikke hente README.md</p>';
+        return;
+      }
+      const md = await res.text();
+      // Render Markdown -> HTML
+      const html = marked.parse(md, {
+        mangle: false,
+        headerIds: true
+      });
+      const content = document.querySelector('#content');
+      content.innerHTML = html;
+      // Sørg for at billeder uden baggrund står på hvid
+      content.querySelectorAll('img').forEach(img => {
+        img.style.background = '#fff';
+      });
+      buildTOC();
+    }
+
+    function slugify(text) {
+      return text.toLowerCase()
+        .replace(/[^a-z0-9\s-æøå]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^[-]+|[-]+$/g, '');
+    }
+
+    function buildTOC() {
+      const toc = document.querySelector('#toc');
+      toc.innerHTML = '<h2>Indhold</h2>';
+
+      const headings = Array.from(document.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5'));
+      if (!headings.length) {
+        toc.insertAdjacentHTML('beforeend', '<p>(Ingen overskrifter fundet)</p>');
+        return;
+      }
+
+      // Tildel ID'er hvis de mangler
+      headings.forEach(h => {
+        if (!h.id) h.id = slugify(h.textContent);
+      });
+
+      // Byg nested liste baseret på niveau
+      const ulStack = [document.createElement('ul')];
+      let prevLevel = parseInt(headings[0].tagName.substring(1));
+
+      headings.forEach(h => {
+        const level = parseInt(h.tagName.substring(1));
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.textContent = h.textContent;
+        a.href = '#' + h.id;
+        li.appendChild(a);
+
+        // Justér stack ift. niveau (H1..H5)
+        if (level > prevLevel) {
+          const newUl = document.createElement('ul');
+          ulStack[0].lastElementChild && ulStack[0].lastElementChild.appendChild(newUl);
+          ulStack.unshift(newUl);
+        } else if (level < prevLevel) {
+          for (let i = level; i < prevLevel; i++) ulStack.shift();
+        }
+        ulStack[0].appendChild(li);
+        prevLevel = level;
+      });
+
+      toc.appendChild(ulStack.pop());
+    }
+
+    loadReadme();
+  </script>
+</body>
+</html>
