@@ -3,7 +3,7 @@ name: Build & Publish Versioned Docs
 on:
   push:
     tags:
-      - 'v*'     # kør når du pusher et tag, fx v1.2.3
+      - 'v*'        # kør når du pusher et tag, fx v1.2.3
   workflow_dispatch:
 
 permissions:
@@ -14,7 +14,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -32,10 +31,11 @@ jobs:
         run: |
           set -eux
           mkdir -p dist css dist/css
-          # Brug repoets css/style.css hvis den findes; ellers læg en default.
+          # Kopiér din egen CSS hvis den findes
           if [ -f css/style.css ]; then
             cp css/style.css dist/css/style.css
           else
+            # Default CSS (skrives til dist/css/style.css)
             cat > dist/css/style.css <<'CSS'
 html, body { background:#fff; color:#111; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height:1.6; }
 main, body { max-width:1080px; margin:2rem auto; padding:0 1rem; }
@@ -50,10 +50,18 @@ figure { counter-increment: fig; margin:1rem 0; }
 figure > figcaption::before { content: "Figur " counter(fig) ". "; font-weight:600; }
 CSS
           fi
+
           # Kopiér billeder hvis de findes
           if [ -d images ]; then cp -r images dist/; fi
+
           # Byg HTML fra README.md
-          pandoc README.md --from=gfm --to=html5 --standalone --toc --toc-depth=3 --metadata title="Dokumentation" --css css/style.css -o dist/index.html
+          pandoc README.md \
+            --from=gfm --to=html5 --standalone \
+            --toc --toc-depth=3 \
+            --metadata title="Dokumentation" \
+            --css css/style.css \
+            -o dist/index.html
+
           # Beskyt mod Jekyll
           : > dist/.nojekyll
 
@@ -63,6 +71,8 @@ CSS
         run: |
           set -eux
           BUILD_DIR="$PWD/dist"
+
+          # Forbered gh-pages branch
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git fetch origin gh-pages:gh-pages || true
@@ -72,15 +82,19 @@ CSS
             git checkout --orphan gh-pages
             rm -rf .
           fi
-          mkdir -p "$VERSION"
+
+          # Kopiér build til versionsmappe
           rm -rf "$VERSION"
           mkdir -p "$VERSION"
           cp -r "$BUILD_DIR/"* "$VERSION/"
+
           # Opdater latest/
           rm -rf latest
           cp -r "$VERSION" latest
-          # .nojekyll
+
+          # .nojekyll i roden
           touch .nojekyll
+
           # Opdater versions.json
           python3 - <<'PY'
 import json, os, re
@@ -97,7 +111,8 @@ def key(s):
 arr=sorted(arr, key=key, reverse=True)
 with open(p,"w") as f: json.dump(arr,f,indent=2)
 PY
-          # Root index.html med version-vælger
+
+          # Root index.html med versionsvælger
           cat > index.html <<'HTML'
 <!DOCTYPE html>
 <html lang="da">
@@ -144,6 +159,8 @@ PY
 </body>
 </html>
 HTML
+
           git add -A
           git commit -m "Publish docs for $VERSION" || echo "No changes to commit"
           git push origin gh-pages
+
