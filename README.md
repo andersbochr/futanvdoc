@@ -4,8 +4,6 @@ Dette dokument beskriver FUT Infrastrukturen, som indeholder applikations- og te
 
 Dokumentet introducerer først de rammer, FUT Infrastrukturen er bygget indenfor, hvorefter den overordnede forretningsarkitektur præsenteres. På baggrund heraf beskrives applikationsarkitekturen for FUT Infrastrukturen og det præciseres hvad en anvenderløsning er, og hvad den skal indeholde. Heraf vil det fremgå, at FUT Infrastrukturen understøtter en række processer (forretningsvendte såvel som tekniske), som anvenderløsninger skal indplacere sig i og tilbyde konkrete, brugervendte løsninger for. Disse processer er centreret omkring borgeres forløb, som består af veldefinerede aktiviteter og opfølgning med henblik på at nå eller vedholde et mål. Det er netop anvenderløsningens ansvar at understøtte brugeroplevelsen for såvel borgere som sundhedspersonale i de processer, der knytter sig til disse forløb. Dokumentet fortsætter ved at beskrive den overordnede brug af den proces- og datamodel, som FUT Infrastrukturen tilbyder anvenderløsninger. I disse beskrivelser angives referencer til mere detaljerede og instruerende beskrivelser.
 
-# Indholdsfortegnelse
-
 # Rammesætning
 
 I dette afsnit introduceres formålet med FUT Infrastrukturen samt de principper og politikker forretnings- og applikationsarkitekturen er bygget omkring.
