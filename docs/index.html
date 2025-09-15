@@ -124,7 +124,7 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     async function loadReadme() {
-      const res = await fetch('README.md'); // pga <base href="../"> svarer dette til ../README.md
+      const res = await fetch('../README.md'); // pga <base href="../"> svarer dette til ../README.md
       if (!res.ok) {
         document.querySelector('#content').innerHTML = '<p>Kunne ikke hente README.md</p>';
         return;
