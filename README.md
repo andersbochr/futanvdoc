@@ -26,39 +26,39 @@ FUT Infrastrukturens formål er at understøtte hjemmebehandling med borgeren 
 
 ## Principper
 
-For at understøtte formålet følges nedenstående principper:
+* For at understøtte formålet følges nedenstående principper:
 
-Borgeren i Centrum: Borgerens behov er i centrum for alle beslutninger og funktioner
+* Borgeren i Centrum: Borgerens behov er i centrum for alle beslutninger og funktioner
 
-Sammenhængende Sundhedsforløb: Borgerne oplever et sammenhængende forløb på tværs af sektorer og sundhedsfaglige teams
+* Sammenhængende Sundhedsforløb: Borgerne oplever et sammenhængende forløb på tværs af sektorer og sundhedsfaglige teams
 
-Datadrevet Beslutningstagning: Beslutninger skal baseres på data og evidens for at sikre kvalitet og effektivitet i behandlingen
+* Datadrevet Beslutningstagning: Beslutninger skal baseres på data og evidens for at sikre kvalitet og effektivitet i behandlingen
 
-Sikkerhed og Privatliv: Beskyttelse af borgernes data skal følge gældende lovgivning
+* Sikkerhed og Privatliv: Beskyttelse af borgernes data skal følge gældende lovgivning
 
-Fleksibilitet og Skalerbarhed: Platformen skal være fleksibel og skalerbar for at kunne tilpasse sig fremtidige behov og teknologiske fremskridt
+* Fleksibilitet og Skalerbarhed: Platformen skal være fleksibel og skalerbar for at kunne tilpasse sig fremtidige behov og teknologiske fremskridt
 
-Anvendelse af eksisterende Offentlige Data: Anvendelse af nationale og internationale standarder for offentlige data for at sikre konsistens, kvalitet og interoperabilitet. Dette inkluderer referencedata (f.eks. klassifikationer og terminologier), masterdata (f.eks. organisationer) og snitflader (f.eks. medcom)
+* Anvendelse af eksisterende Offentlige Data: Anvendelse af nationale og internationale standarder for offentlige data for at sikre konsistens, kvalitet og interoperabilitet. Dette inkluderer referencedata (f.eks. klassifikationer og terminologier), masterdata (f.eks. organisationer) og snitflader (f.eks. medcom)
 
-Åbenhed og Interoperabilitet: Understøtte gængse teknologier for anvenderløsninger og herved en flerleverandørstrategi for anvenderløsninger
+* Åbenhed og Interoperabilitet: Understøtte gængse teknologier for anvenderløsninger og herved en flerleverandørstrategi for anvenderløsninger
 
 ## Politikker
 
 Principperne udmøntes konkret i de nedenstående politikker, som udgør de mest konkrete input til realiseringen af FUT-Infrastrukturen:
 
-Adgangskontrol og Autorisation: Varetage rollebaseret adgangskontrol for at sikre, at kun autoriserede sundhedsfaglige personer har adgang til relevante data
+* Adgangskontrol og Autorisation: Varetage rollebaseret adgangskontrol for at sikre, at kun autoriserede sundhedsfaglige personer har adgang til relevante data
 
-Datastyring og Kvalitet: Sikre klare retningslinjer for datastyring, herunder datakvalitet, dataintegritet og databeskyttelse
+* Datastyring og Kvalitet: Sikre klare retningslinjer for datastyring, herunder datakvalitet, dataintegritet og databeskyttelse
 
-Sikkerhedspolitik: Vedligeholde en sikkerhedspolitik, der dækker alle aspekter af platformens drift
+* Sikkerhedspolitik: Vedligeholde en sikkerhedspolitik, der dækker alle aspekter af platformens drift
 
-Compliance: Sikre, at platformen overholder alle relevante love og reguleringer, herunder GDPR og sundhedslovgivning
+* Compliance: Sikre, at platformen overholder alle relevante love og reguleringer, herunder GDPR og sundhedslovgivning
 
-Brugerinvolvering og Feedback: Aktivt inddrage anvenderløsningerne i udviklingen og forbedringen af platformen gennem regelmæssig feedback og brugerundersøgelser
+* Brugerinvolvering og Feedback: Aktivt inddrage anvenderløsningerne i udviklingen og forbedringen af platformen gennem regelmæssig feedback og brugerundersøgelser
 
-Kontinuerlig Forbedring: Implementere en politik for kontinuerlig forbedring, hvor infrastrukturen løbende evalueres og opdateres baseret på brugerfeedback og teknologiske fremskridt
+* Kontinuerlig Forbedring: Implementere en politik for kontinuerlig forbedring, hvor infrastrukturen løbende evalueres og opdateres baseret på brugerfeedback og teknologiske fremskridt
 
-Standardisering i forhold til Offentlige Data: Infrastrukturen skal de godkendte standarder fra relevante myndigheder. Dette inkluderer datastandarder, snitfladestandarder, terminologier og klassifikationer.
+* Standardisering i forhold til Offentlige Data: Infrastrukturen skal de godkendte standarder fra relevante myndigheder. Dette inkluderer datastandarder, snitfladestandarder, terminologier og klassifikationer.
 
 # Begreber
 
@@ -85,17 +85,18 @@ Af nedenstående tabel fremgår de mest anvendte begreber i FUT Infrastrukturen.
 
 # Forretningsarkitektur
 
-FUT Infrastrukturens formål er omsat til en forretningsarkitektur, der består af kapabiliteter, der hver stiller data, services og processer til rådighed for udviklingen af en anvenderløsning. I nedenstående figur introduceres kapabiliteterne inddelt i tre grupperinger:
 
 ![Billede](images/image_3_1.png)
 
+FUT Infrastrukturens formål er omsat til en forretningsarkitektur, der består af kapabiliteter, der hver stiller data, services og processer til rådighed for udviklingen af en anvenderløsning. I nedenstående figur introduceres kapabiliteterne inddelt i tre grupperinger:
+
 De applikationsvendte kapabiliteter, som giver mulighed for at bygge en anvenderløsning på baggrund af adgang til data med en veldefineret model og tilhørerende services.
 
-Basiskapabiliteter, der sikrer at de mere tekniske aspekter af FUT infrastrukturen kan realiseres. Det drejer sig fortrinsvist om integration til data og services i det øvrige IT-landskab for sundhed, sikkerhed , analyse og rapportering og drift.
+* Basiskapabiliteter, der sikrer at de mere tekniske aspekter af FUT infrastrukturen kan realiseres. Det drejer sig fortrinsvist om integration til data og services i det øvrige IT-landskab for sundhed, sikkerhed , analyse og rapportering og drift.
 
-Governance, Risc og Compliance, som er den organisatoriske og dokumentations-baserede støtte til en målrettet, stabil og sikker anvendelse og videreudvikling af FUT Infrastrukturen.
+* Governance, Risc og Compliance, som er den organisatoriske og dokumentations-baserede støtte til en målrettet, stabil og sikker anvendelse og videreudvikling af FUT Infrastrukturen.
 
-Konkret anvendes FHIR forretningsobjekter og services til realisering af de tekniske aspekter, mens driftsaspekterne håndteres ved hjælp af containerization i kubernetes.
+* Konkret anvendes FHIR forretningsobjekter og services til realisering af de tekniske aspekter, mens driftsaspekterne håndteres ved hjælp af containerization i kubernetes.
 
 Tilføj data og proces capability, gør drift, support og devops tydligere (evt eget lag?) og huske også koder og terminologi, tilføj også planer og spørgeskemaer
 
@@ -107,23 +108,23 @@ I de følgende afsnit introduceres hovedprocesserne for forretningskapabiliteter
 
 Vedligehold af borgeres data, som støttes af
 
-Integration til eksterne data og services: Import af data fra CPR
+* Integration til eksterne data og services: Import af data fra CPR
 
-Vedligehold af pårørende-relationer
+* Vedligehold af pårørende-relationer
 
-Uddelegering af fuldmagt til pårørende
+* Uddelegering af fuldmagt til pårørende
 
-Udsendelse af beskeder til borgere, som støttes af
+* Udsendelse af beskeder til borgere, som støttes af
 
-Kommunikation med borgere: Afsendelse via NemSMS
+* Kommunikation med borgere: Afsendelse via NemSMS
 
 ## Aktører og Ansvar
 
 Vedligehold af Organisatoriske data, som støttes af
 
-Integration til eksterne data og services: Blandt andet SOR, Fælleskommunale Organisationssystem og Yderregisteret
+* Integration til eksterne data og services: Blandt andet SOR, Fælleskommunale Organisationssystem og Yderregisteret
 
-Vedligehold af Careteams bestående af sundhedspersonale på tværs af organisationer, der varetager omsorg for borgere
+* Vedligehold af Careteams bestående af sundhedspersonale på tværs af organisationer, der varetager omsorg for borgere
 
 ## Beslutningsstøtte
 
@@ -143,23 +144,23 @@ Vedligehold af spørgeskemadefinitioner, der kan indgå i en eller flere aktivit
 
 Vedligehold af kodesæt og terminologi, som understøttes af
 
-Integration til eksterne data og services: Blandt andet import af diagnoser og borgertilstande
+* Integration til eksterne data og services: Blandt andet import af diagnoser og borgertilstande
 
-Definition af værdisæt, på baggrund af kodesæt, eksempelvis
+* Definition af værdisæt, på baggrund af kodesæt, eksempelvis
 
 ## Forløb
 
-Oprettelse og vedligehold af telemedicinsk forløb
+* Oprettelse og vedligehold af telemedicinsk forløb
 
-Vedligehold af en eller flere planer for omsorgen i forløbet på baggrund af plandefinitioner med tilpasninger til den enkelte borger
+* Vedligehold af en eller flere planer for omsorgen i forløbet på baggrund af plandefinitioner med tilpasninger til den enkelte borger
 
-Udsendelse af påmindelser om forestående aktiviteter til borgere, som støttes af
+* Udsendelse af påmindelser om forestående aktiviteter til borgere, som støttes af
 
-Kommunikation med borgere
+ * Kommunikation med borgere
 
-Udførsel af aktiviteter og opfølgning på disse, blandt andet på baggrund af afvikling af beslutningsstøtte
+* Udførsel af aktiviteter og opfølgning på disse, blandt andet på baggrund af afvikling af beslutningsstøtte
 
-Oprettelse af opfølgningsopgaver til Careteams baseret på afvikling af beslutningsstøtte
+* Oprettelse af opfølgningsopgaver til Careteams baseret på afvikling af beslutningsstøtte
 
 ## Adgange og rettigheder
 
