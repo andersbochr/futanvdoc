@@ -112,17 +112,30 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     async function loadReadme() {
-      const res = await fetch('./README.md'); // henter fra roden
-      if (!res.ok) {
+      try {
+        const res = await fetch('./README.md'); // henter fra roden
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const md = await res.text();
+        const html = marked.parse(md, { mangle: false, headerIds: true });
+        const content = document.querySelector('#content');
+        content.innerHTML = html;
+        // Billeder: hvid baggrund og fallback til 'images/' hvis src er relativ og 404'er
+        content.querySelectorAll('img').forEach(img => {
+          img.style.background = '#fff';
+          const orig = img.getAttribute('src') || '';
+          img.addEventListener('error', () => {
+            // Hvis allerede prøvet fallback, undgå loop
+            if (!orig.startsWith('images/') && !img.dataset.fallbackTried) {
+              img.dataset.fallbackTried = '1';
+              img.src = 'images/' + orig.replace(/^\.\//, '');
+            }
+          });
+        });
+        buildTOC();
+      } catch (e) {
         document.querySelector('#content').innerHTML = '<p>Kunne ikke hente README.md</p>';
-        return;
+        console.error(e);
       }
-      const md = await res.text();
-      const html = marked.parse(md, { mangle: false, headerIds: true });
-      const content = document.querySelector('#content');
-      content.innerHTML = html;
-      content.querySelectorAll('img').forEach(img => { img.style.background = '#fff'; });
-      buildTOC();
     }
 
     function slugify(text) {
@@ -138,27 +151,48 @@
       toc.innerHTML = '<h2>Indhold</h2>';
       const headings = Array.from(document.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5'));
       if (!headings.length) { toc.insertAdjacentHTML('beforeend', '<p>(Ingen overskrifter fundet)</p>'); return; }
+      // Tildel id'er hvis mangler
       headings.forEach(h => { if (!h.id) h.id = slugify(h.textContent); });
-      const ulStack = [document.createElement('ul')];
-      let prevLevel = parseInt(headings[0].tagName.substring(1));
-      headings.forEach(h => {
+
+      const rootUl = document.createElement('ul');
+      let currentLevel = 1;
+      let parents = [rootUl];
+
+      headings.forEach((h, idx) => {
         const level = parseInt(h.tagName.substring(1));
+        // Sikre fornuftig start
+        if (idx === 0) currentLevel = level;
+        // Gå op eller ned i hierarkiet
+        if (level > currentLevel) {
+          // Opret mellem-niveauer hvis springer mere end 1
+          for (let l = currentLevel + 1; l <= level; l++) {
+            const ul = document.createElement('ul');
+            const lastLi = parents[0].lastElementChild;
+            if (lastLi) {
+              lastLi.appendChild(ul);
+              parents.unshift(ul);
+            } else {
+              // hvis ingen lastLi, append direkte til nærmeste parent
+              parents[0].appendChild(ul);
+              parents.unshift(ul);
+            }
+          }
+          currentLevel = level;
+        } else if (level < currentLevel) {
+          for (let l = currentLevel; l > level; l--) {
+            parents.shift();
+          }
+          currentLevel = level;
+        }
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = h.textContent;
         a.href = '#' + h.id;
         li.appendChild(a);
-        if (level > prevLevel) {
-          const newUl = document.createElement('ul');
-          ulStack[0].lastElementChild && ulStack[0].lastElementChild.appendChild(newUl);
-          ulStack.unshift(newUl);
-        } else if (level < prevLevel) {
-          for (let i = level; i < prevLevel; i++) ulStack.shift();
-        }
-        ulStack[0].appendChild(li);
-        prevLevel = level;
+        parents[0].appendChild(li);
       });
-      toc.appendChild(ulStack.pop());
+
+      toc.appendChild(rootUl);
     }
 
     loadReadme();
