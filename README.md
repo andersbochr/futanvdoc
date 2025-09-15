@@ -87,6 +87,8 @@ Af nedenstående tabel fremgår de mest anvendte begreber i FUT Infrastrukturen.
 
 FUT Infrastrukturens formål er omsat til en forretningsarkitektur, der består af kapabiliteter, der hver stiller data, services og processer til rådighed for udviklingen af en anvenderløsning. I nedenstående figur introduceres kapabiliteterne inddelt i tre grupperinger:
 
+![Billede](images/image_3_1.png)
+
 De applikationsvendte kapabiliteter, som giver mulighed for at bygge en anvenderløsning på baggrund af adgang til data med en veldefineret model og tilhørerende services.
 
 Basiskapabiliteter, der sikrer at de mere tekniske aspekter af FUT infrastrukturen kan realiseres. Det drejer sig fortrinsvist om integration til data og services i det øvrige IT-landskab for sundhed, sikkerhed , analyse og rapportering og drift.
