@@ -37,18 +37,18 @@ jobs:
             cp css/style.css dist/css/style.css
           else
             cat > dist/css/style.css <<'CSS'
-html, body { background:#fff; color:#111; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height:1.6; }
-main, body { max-width:1080px; margin:2rem auto; padding:0 1rem; }
-img { max-width:100%; height:auto; background:#fff; }
-table { border-collapse:collapse; width:100%; margin:1rem 0; }
-th, td { border:1px solid #e5e7eb; padding:.5rem .6rem; text-align:left; }
-th { background:#fafafa; }
-#TOC { border:1px solid #e5e7eb; padding:1rem; background:#fff; }
-#TOC ul { margin:0; }
-body { counter-reset: fig; }
-figure { counter-increment: fig; margin:1rem 0; }
-figure > figcaption::before { content: "Figur " counter(fig) ". "; font-weight:600; }
-CSS
+            html, body { background:#fff; color:#111; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height:1.6; }
+            main, body { max-width:1080px; margin:2rem auto; padding:0 1rem; }
+            img { max-width:100%; height:auto; background:#fff; }
+            table { border-collapse:collapse; width:100%; margin:1rem 0; }
+            th, td { border:1px solid #e5e7eb; padding:.5rem .6rem; text-align:left; }
+            th { background:#fafafa; }
+            #TOC { border:1px solid #e5e7eb; padding:1rem; background:#fff; }
+            #TOC ul { margin:0; }
+            body { counter-reset: fig; }
+            figure { counter-increment: fig; margin:1rem 0; }
+            figure > figcaption::before { content: "Figur " counter(fig) ". "; font-weight:600; }
+            CSS
           fi
           # Kopiér billeder hvis de findes
           if [ -d images ]; then cp -r images dist/; fi
