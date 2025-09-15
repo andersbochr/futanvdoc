@@ -16,15 +16,15 @@ FUT Infrastrukturens formål er at understøtte hjemmebehandling med borgeren 
 
 * samarbejde om patienten gennem teams, der går på tværs af regioner, kommuner og primærsektoren
 
-- fælles udvikling og vedligehold af funktionalitet, der understøtter anvenderløsninger indenfor monitorering, forebyggelse og behandling
+* fælles udvikling og vedligehold af funktionalitet, der understøtter anvenderløsninger indenfor monitorering, forebyggelse og behandling
 
-- etablering af best practices for udvikling og drift af nye anvenderløsninger
+* etablering af best practices for udvikling og drift af nye anvenderløsninger
 
-- sikker adgang baseret på eksplicitte adgange til data (f.eks. borgers egne data eller sundhedspersonales adgang via teams)
+* sikker adgang baseret på eksplicitte adgange til data (f.eks. borgers egne data eller sundhedspersonales adgang via teams)
 
-- strømlining af mulighederne for at udvinde yderligere værdi af data via ensartet og kvalitetssikret proces- og datamodel
+* strømlining af mulighederne for at udvinde yderligere værdi af data via ensartet og kvalitetssikret proces- og datamodel
 
-- fælles deployment, drift og overvågning på standardiseret teknologi-infrastruktur (herunder hosting af anvenderløsninger)
+* fælles deployment, drift og overvågning på standardiseret teknologi-infrastruktur (herunder hosting af anvenderløsninger)
 
 ## Principper
 
