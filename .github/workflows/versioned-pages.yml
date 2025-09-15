@@ -26,45 +26,31 @@ jobs:
           sudo apt-get install -y pandoc
 
       - name: Build HTML from README
-        env:
-          VERSION: ${{ github.ref_name }}
+        shell: bash
         run: |
           set -eux
-          mkdir -p dist css dist/css
-          # Kopiér din egen CSS hvis den findes
+          mkdir -p dist/css
           if [ -f css/style.css ]; then
             cp css/style.css dist/css/style.css
           else
-            # Default CSS (skrives til dist/css/style.css)
             cat > dist/css/style.css <<'CSS'
-html, body { background:#fff; color:#111; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height:1.6; }
-main, body { max-width:1080px; margin:2rem auto; padding:0 1rem; }
-img { max-width:100%; height:auto; background:#fff; }
-table { border-collapse:collapse; width:100%; margin:1rem 0; }
-th, td { border:1px solid #e5e7eb; padding:.5rem .6rem; text-align:left; }
-th { background:#fafafa; }
-#TOC { border:1px solid #e5e7eb; padding:1rem; background:#fff; }
-#TOC ul { margin:0; }
-body { counter-reset: fig; }
-figure { counter-increment: fig; margin:1rem 0; }
-figure > figcaption::before { content: "Figur " counter(fig) ". "; font-weight:600; }
-CSS
-          fi
-
-          # Kopiér billeder hvis de findes
-          if [ -d images ]; then cp -r images dist/; fi
-
-          # Byg HTML fra README.md
-          pandoc README.md \
-            --from=gfm --to=html5 --standalone \
-            --toc --toc-depth=3 \
-            --metadata title="Dokumentation" \
-            --css css/style.css \
-            -o dist/index.html
-
-          # Beskyt mod Jekyll
+              html, body { background:#fff; color:#111; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height:1.6; }
+              main, body { max-width:1080px; margin:2rem auto; padding:0 1rem; }
+              img { max-width:100%; height:auto; background:#fff; }
+              table { border-collapse:collapse; width:100%; margin:1rem 0; }
+              th, td { border:1px solid #e5e7eb; padding:.5rem .6rem; text-align:left; }
+              th { background:#fafafa; }
+              #TOC { border:1px solid #e5e7eb; padding:1rem; background:#fff; }
+              #TOC ul { margin:0; }
+              body { counter-reset: fig; }
+              figure { counter-increment: fig; margin:1rem 0; }
+              figure > figcaption::before { content: "Figur " counter(fig) ". "; font-weight:600; }
+            CSS
+                fi
+          [ -d images ] && cp -r images dist/
+          pandoc README.md --from=gfm --to=html5 --standalone --toc --toc-depth=3 --metadata title="Dokumentation" --css css/style.css -o dist/index.html
           : > dist/.nojekyll
-
+      
       - name: Publish into gh-pages under version directory
         env:
           VERSION: ${{ github.ref_name }}
@@ -97,68 +83,68 @@ CSS
 
           # Opdater versions.json
           python3 - <<'PY'
-import json, os, re
-v=os.environ.get("VERSION","").strip()
-p="versions.json"
-arr=[]
-if os.path.exists(p):
-    with open(p) as f: arr=json.load(f)
-if v and v not in arr: arr.append(v)
-def key(s):
-    s=s.lstrip('vV')
-    parts=[int(x) if x.isdigit() else 0 for x in re.split(r'[._-]', s)]
-    return parts
-arr=sorted(arr, key=key, reverse=True)
-with open(p,"w") as f: json.dump(arr,f,indent=2)
-PY
+            import json, os, re
+            v=os.environ.get("VERSION","").strip()
+            p="versions.json"
+            arr=[]
+            if os.path.exists(p):
+                with open(p) as f: arr=json.load(f)
+            if v and v not in arr: arr.append(v)
+            def key(s):
+                s=s.lstrip('vV')
+                parts=[int(x) if x.isdigit() else 0 for x in re.split(r'[._-]', s)]
+                return parts
+            arr=sorted(arr, key=key, reverse=True)
+            with open(p,"w") as f: json.dump(arr,f,indent=2)
+            PY
 
           # Root index.html med versionsvælger
           cat > index.html <<'HTML'
-<!DOCTYPE html>
-<html lang="da">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Versioneret dokumentation</title>
-  <style>
-    body{background:#fff;color:#111;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;margin:0;padding:2rem;max-width:900px}
-    header{margin-bottom:1rem}
-    a{color:#0d6efd;text-decoration:none}
-    a:hover{text-decoration:underline}
-    .muted{color:#666}
-    select{padding:.4rem .6rem}
-    ul{line-height:1.8}
-    .card{border:1px solid #e5e7eb;border-radius:8px;padding:1rem;background:#fff}
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Versioneret dokumentation</h1>
-    <p class="muted">Vælg en specifik version, eller gå til seneste.</p>
-  </header>
-  <div class="card">
-    <p><strong>Seneste version:</strong> <a href="./latest/">Åbn <code>latest/</code></a></p>
-    <label for="ver">Vælg version:</label>
-    <select id="ver"><option>Indlæser…</option></select>
-  </div>
-  <h2>Alle versioner</h2>
-  <ul id="list"><li class="muted">Indlæser…</li></ul>
-  <script>
-    fetch('./versions.json').then(r=>r.json()).then(versions=>{
-      const sel=document.getElementById('ver'); sel.innerHTML='';
-      const list=document.getElementById('list'); list.innerHTML='';
-      versions.forEach(v=>{
-        const opt=document.createElement('option'); opt.value=v; opt.textContent=v; sel.appendChild(opt);
-        const li=document.createElement('li'); const a=document.createElement('a'); a.href=v+'/'; a.textContent=v; li.appendChild(a); list.appendChild(li);
-      });
-      sel.onchange = () => location.href = sel.value + '/';
-    }).catch(()=>{
-      document.getElementById('list').textContent='Kunne ikke indlæse versions.json';
-    });
-  </script>
-</body>
-</html>
-HTML
+            <!DOCTYPE html>
+            <html lang="da">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>Versioneret dokumentation</title>
+              <style>
+                body{background:#fff;color:#111;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;margin:0;padding:2rem;max-width:900px}
+                header{margin-bottom:1rem}
+                a{color:#0d6efd;text-decoration:none}
+                a:hover{text-decoration:underline}
+                .muted{color:#666}
+                select{padding:.4rem .6rem}
+                ul{line-height:1.8}
+                .card{border:1px solid #e5e7eb;border-radius:8px;padding:1rem;background:#fff}
+              </style>
+            </head>
+            <body>
+              <header>
+                <h1>Versioneret dokumentation</h1>
+                <p class="muted">Vælg en specifik version, eller gå til seneste.</p>
+              </header>
+              <div class="card">
+                <p><strong>Seneste version:</strong> <a href="./latest/">Åbn <code>latest/</code></a></p>
+                <label for="ver">Vælg version:</label>
+                <select id="ver"><option>Indlæser…</option></select>
+              </div>
+              <h2>Alle versioner</h2>
+              <ul id="list"><li class="muted">Indlæser…</li></ul>
+              <script>
+                fetch('./versions.json').then(r=>r.json()).then(versions=>{
+                  const sel=document.getElementById('ver'); sel.innerHTML='';
+                  const list=document.getElementById('list'); list.innerHTML='';
+                  versions.forEach(v=>{
+                    const opt=document.createElement('option'); opt.value=v; opt.textContent=v; sel.appendChild(opt);
+                    const li=document.createElement('li'); const a=document.createElement('a'); a.href=v+'/'; a.textContent=v; li.appendChild(a); list.appendChild(li);
+                  });
+                  sel.onchange = () => location.href = sel.value + '/';
+                }).catch(()=>{
+                  document.getElementById('list').textContent='Kunne ikke indlæse versions.json';
+                });
+              </script>
+            </body>
+            </html>
+            HTML
 
           git add -A
           git commit -m "Publish docs for $VERSION" || echo "No changes to commit"
