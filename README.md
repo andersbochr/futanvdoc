@@ -410,35 +410,39 @@ Underprocesserne i oprettelsen af et forløb beskrives i den følgende tabel.
 
 ## Aktivitet, Måling og Opfølgning
 
-Afvikling af aktiviteter med resulterende målinger, afvikling af regler og opfølgning
+Den overordnede arbejdsgang for forløb tager udgangspunkt i, at borgeren eller en kliniker udfører de aktiviteter, der indgår i de individuelle planer for borgeren. Aktiviteterne vil ofte være gentagne (periodiske), så de skal udføres på bestemte ugedage og klokkeslæt. Selve udførelsen vil typisk bestå af besvarelse af spørgeskemaer, tekstuelle tilkendegivelser om borgerens helbred og velbefindende eller aflæsning af tal-værdier for eksempelvis blodtryk, puls eller iltmætning. 
 
-#### Underprocesser
+Anvenderløsningen præsenterer typisk aktiviteterne for brugeren, som derefter kan udføre dem og indsende resultaterne. I FUT-I omtales disse resultater som måleresultater (measurements),der består af et antal FHIR ressourcer. Disse refererer til aktiviteten og indeholder tidspunkt for indsendelsen samt tidsperioden, som måleresultatet gælder for.
 
-De underprocesser
+Måleresultaterne danner grundlag for, at sundhedspersonalet kan følge udviklingen i borgerens tilstand. Udover de konkrete værdier i måleresultatet tilbyder FUT-I også afvikling af beslutningsstøtte, som kan foretage eksempelvis triagering på resultaterne. Denne beslutningsstøtte bliver automatisk afviklet når en måling bliver indsendt af anvenderløsningen. 
+
+Det er op til den enkelte anvenderløsning at specificere de regler, der skal afvikles for at realisere beslutningsstøtten. En regel kan både forholde sig til værdier i såvel den enkelte måling som i udviklingen over de seneste målinger. En regel kan for eksempel forholde sig til, at en borger har iltmætning i blodet på 89 procent eller at mætningen over de seneste målinger har udviklet sig gradvist fra 96 procent til 92 procent. 
+
+Uanset om det er beslutningsstøtte eller sundhedspersonale, der beskriver noget om borgerens tilstand foregår det i FUT-I i form af et klinisk indtryk (clinical impression). Disse indtryk vil udpege de dele af måleresultater, som ligger til grund for dem. Både regler og sundhedspersonale kan derudover tilknytte opgaver, der skal udføres på baggrund af de kliniske udtryk. Indenfor FUT-I vil en opgave eksempelvis kunne være at afholde et videomøde med borgeren eller at foretage en justering af borgerens plan. Udenfor FUT-I vil en opgave eksempelvis bestå i bestilling af ydelser hos andre sundhedsorganisationer.
+
+Underprocesserne beskrives i den følgende tabel.
 
 | Proces | Formål | Anvendelse | Involverede FHIR Ressourcer |
 | --- | --- | --- | --- |
-| Borgeraktivetet | Give borger overblik over udestående aktiviteter, udføre disse og aflevere resultatet |   | Observation Media QuestionnaireResponse Provenance |
-| Beslutningsstøtte for målinger | Yde støtte til beslutninger på baggrund af borgerens målinger |   | Library Task ClinicalImpression Message |
-| Opfølgning |   |   |   |
-| Invalidering af måling |   |   |   |
+| Borgeraktivetet | Give borger eller sundhedspersonale overblik over udestående aktiviteter, udføre disse og indsende måleresultatet | Anvendersløsningen henter overblik over borgerens aktiviteter og indsendte måleresultater for en given periode. Heraf kan anvenderløsningen udlede både allerede udførte og ikke udførte aktiviteter. På baggrund heraf kan den udstille muligheden for at vælge, hvilken aktivitet borgeren skal udføre, samt hvilket tidsrum måleresultatet skal gælde for. Dette tidsrum vil ofte være stærkt knyttet til det tidsrum aktiviteten er knyttet til. Eksempelvis kan det give mening at besvare et spørgeskema på en given dag, men besvare det på baggrund af, hvordan borgeren havde det dagen før.<br> Når aktiviteten er udført indsendes resultatet, hvorefter eventuel beslutningsstøtte bliver afviklet automatisk | Borgerens aktiviteter hentes med FHIR operationen [Get Patient Procedures](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-get-patient-procedures.html)<br><br>Måleresultateter indsendes med FHIR operationen submit-measurement, som konkret tager mod et FHIR Bundle bestående af: <br><br><ul> <li>[ Observation](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-observation.html), der kan indeholde tal- og teksværdier</li><li>[Media](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-media.html), som kan indeholde billedmateriale </li><li>[QuestionnaireResponse](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-questionnaireresponse.html), der er en besvarelse af et spørgeskema </li><li>[Provenance](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-provenance.html), der kan beskriver, hvordan måleresultatet er blevet til</li></ul> |
+| Beslutningsstøtte for måleresultater | Yde støtte til beslutninger på baggrund af borgerens målinger |  Ved indsendelse af måleresultater for aktiviteter i borgerens individuelle plan bliver de regler, som er specificeret i plandefinitionen, som er knyttet til borgerens individuelle plan afviklet af FUT-I.<br><br> | Infrastrukturen identificerer hvilke regler, der skal afvikles ud fra definitionen i Library. Resultatet af afviklingen afhænger af reglener, men kan være:<br><br> <ul><li>[Task](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-task.html) </li><li>[ClinicalImpression](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-clinicalimpression.html)  </li></ul> |
+| Opfølgning |  Afklaring af nødvendige handlinger på baggrund af borgerens måleresultater og beslutningsstøtte | Sundhedspersonale kan via anvenderløsningen danne sig et overblik over borgerens tilstand og udviklingen i samme. Med afsæt heri kan sunhedspersonalet beskrive yderligere indtryk af borgeren, indkalde borgeren til en videokonsultation eller ændre i borgerens plan. |  Anvenderløsningen kalder [Search Measurement](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-search-measurements.html), som giver overblik over målinger. <br><br> Endvidere anvenderløsningen fremsøge og oprette [Task](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-task.html). Bemærk at der allerede kan være oprettet task ved afvikling af beslutningsstøtte. |
+| Invalidering af måleresultat | Fejlmarkere et måleresultat og understøtte indsendelse af nyt|  I tilfælde hvor det konstateres, at der er indsendt et forkert måleresultat understøtter FUT-I at disse kan markeres som fejlagtige. Herved kan en ny måling udføres samtidig med, at det fejlagtige måleresultat stadig eksisterer som grundlag for sporbarhed og optimering.  | Anvenderløsningen kalder [Invalidate / Retract Invalidation of a Measurement](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition-ClinicalImpression-t-set-measurement-validity.html)   |
 
 
 
 ## Støtte til Gennemførsel af Aktiviteter
 
-Støtte til gennemførsel af aktiviteter
+FUT-I kan udsende forskellige typer af kommunikation i forbindelse med, at der indtræffer hændelser - enten baseret på tid eller udførsel af en egentlig handling. I dette afsnit beskrives den kommunikation, som understøtter gennemførsel af aktiviteter.
 
-#### Underprocesser
-
-De underprocesser
+Underprocesserne beskrives i den følgende tabel.
 
 | Proces | Formål | Anvendelse | Involverede FHIR Ressourcer |
 | --- | --- | --- | --- |
-| Opt-In/Opt-Out | Give borgere og sundhedsmedarbejdere medbestemmelse over hvilken kommunikation, de modtager, i forbindelse med borgeres gennemførsel af aktiviteter |   | CommunicationRequest |
-| Påmindelse, kommende aktivitet | Minde borgere om deres forestående aktiviteter, så de husker at gennemføre dem |   | Service Request Message? |
-| Påmindelse, manglende aktivitet | Minde borgere om aktiviteter, der har overskredet deres deadline, så de kan gennemføre dem hurtigst muligt Gøre sundhedsmedarbejdere opmærksomme på, at en borger ikke har udført sin aktivitet, så de kan hjælpe borgeren |   | Task Message? |
-| Afslut aktivitets-relaterede opgaver | Afslutte de opgaver til sundhedspersonale, som er oprettet for tidligere konstateret manglende gennemførsel af borgeraktivitet når aktiviteten er gennemført. |   | Task |
+| Til- og framelding | Give borgere og sundhedsmedarbejdere medbestemmelse over hvilken kommunikation, de modtager, i forbindelse med borgeres gennemførsel af aktiviteter |  Det er muligt for anvendersystemet at angive om en modtager i form a borger eller sundhedspersonale ønsker at modtage kommuniktion ved konkrete hændelser. Bemærk at kommunikation udsendes som standard ved nogle kombinationer af aktør og hændelse, men ikke ved andre. Det er derfor muligt både at undertrykke og aktivere kommunikation.   | Anvenderløsningen vedligeholder [ CommunicationRequest](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-communication-request.html). |
+| Kommende aktivitet | Minde borgere om deres forestående aktiviteter, så de husker at gennemføre dem |  FUT-I kan udsende kommunikation for at minde borgere om forestående aktiviteter, for at hjælpe dem til at huske dem.| [EHealthMessage](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-message.html)|
+| Manglende aktivitet | |  FUT-I kan udsende kommunikation for at minde borgere om aktiviteter, der har overskredet deres deadline, så de kan gennemføre dem hurtigst muligt. Endvidere er det muligt at gøre sundhedspersonale opmærksomme på, at en borger ikke har udført sin aktivitet, så de kan hjælpe borgeren  |[EHealthMessage](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-message.html)  |
+| Afslut aktivitets-relaterede opgaver | Afslutte de opgaver til sundhedspersonale, som er oprettet for tidligere konstateret manglende gennemførsel af borgeraktivitet når aktiviteten er gennemført. |  FUT-I kan under afviklingen af beslutningsstøtte konstatere, om den aktivitet, som borgeren har udført er udført senere end den var planlagt I såfald kan underprocessen manglende aktivitet have oprettet en task til careteamet. Denne tilknyttede taks kan i givet fald lukkes. | [Task](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-task.html)|
 
 
 
