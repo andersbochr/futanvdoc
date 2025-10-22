@@ -85,10 +85,9 @@ Af nedenstående tabel fremgår de mest anvendte begreber i FUT Infrastrukturen.
 
 # Forretningsarkitektur
 
-
-![Billede](images/image_3_1.png)
-
 FUT Infrastrukturens formål er omsat til en forretningsarkitektur, der består af kapabiliteter, der hver stiller data, services og processer til rådighed for udviklingen af en anvenderløsning. I nedenstående figur introduceres kapabiliteterne inddelt i tre grupperinger:
+
+![Billede](images/forretningsarkitektur.png)
 
 De applikationsvendte kapabiliteter, som giver mulighed for at bygge en anvenderløsning på baggrund af adgang til data med en veldefineret model og tilhørerende services.
 
@@ -226,7 +225,9 @@ I dette afsnit gennemgås det, hvordan forretningsarkitekturen er realiseret i e
 
 ## FUT-Infrastrukturen
 
-I dette afsnit introduceres det kort, hvordan forretningsarkitekturen er realiseret. Som det ses af nedenstående illustration er ansvaret for applikationen delt mellem anvenderløsningen og FUT Services. Anvenderløsningens ansvar er at lave en borger- og klinikervendt service i form af backend service med et tilhørende interface. Anvenderløsningen bruger FUT-Infrastrukturen services og leveres som en komponent, der driftes i samme miljø som infrastrukturen, konkret via Kubernetes. Desuden kan anvenderløsningen indeholde en frontend, som udstiller services til borgere og sundhedspersonale. Deployment varetages af tværgående DevOps processer og værktøjer, mens  Sikkerheden varetages af KeyCloak.
+I dette afsnit introduceres det kort, hvordan forretningsarkitekturen er realiseret. Som det ses af nedenstående illustration er ansvaret for applikationen delt mellem anvenderløsningen og FUT Services. Anvenderløsningens ansvar er at lave en borger- og klinikervendt service i form af backend service med et tilhørende interface. Anvenderløsningen bruger FUT-Infrastrukturen services og leveres som en komponent, der driftes i samme miljø som infrastrukturen, konkret via Kubernetes. Desuden kan anvenderløsningen indeholde en frontend, som udstiller services til borgere og sundhedspersonale. Deployment varetages af tværgående DevOps processer og værktøjer, mens  Sikkerheden varetages af Keycloak.
+
+![Billede](images/anvender-applikation.png)
 
 ... tilføj devops pipeline...
 
@@ -290,6 +291,9 @@ Helm til deployment orchestration.
 
 En anvenderløsninger er en containeriserede webklient med tilhørende backend-komponenter, der interagerer med en mikroservice-baseret FHIR-platform hostet på Kubernetes (k8s). Den understøtter autentificering via Keycloak og adgang til FHIR-data gennem sikrede API-kald. Den deployes som en Helm-baseret applikation og integreres i platformens tekniske services som Istio og CI/CD pipelines.
 
+![Billede](images/anvender-teknologi.png)
+
+
 I de følgende afsnit beskrives kravene til anvenderløsningens forskellige dele.
 
 ### Frontend
@@ -332,8 +336,7 @@ I dette afsnit introduceres de processer, der er mest relevante for processer fo
 
 Forløbsprocessen er den centrale proces, en anvenderløsning skal understøtte. Den er illustreret i nedenstående figur, hvor selve processen er repræsenteret ved den gule kasse Forløb, som indeholder de underprocesser, anvenderløsningen er ansvarlig for. I figuren fremgår også et antal processer, som FUT Infrastrukturen tilbyder anvenderløsninger for at understøtte forløbet. Disse beskrives senere i dette afsnit.
 
-Forløbsprocessen i kontekst af FUT Infrastrukturen
-
+![Billede](images/proces-forløb.png) 
 Det er forløbet, der beskriver hvilken diagnose, borgeren modtager omsorg for, samt hvilke parter der er involveret. Omsorg dækker bredt over monitorering, behandling, undervisning og hjælp til selvhjælp. Parterne består dels af de sundhedsfaglige personer, der er involveret i det konkrete forløb samt de organisatoriske enheder, der har ansvaret for dem. Den konkrete omsorg er repræsenteret af en plan, der beskriver de aktiviteter, der skal udføres for eller af borgeren.
 
 Eksempler:
@@ -362,29 +365,33 @@ De processer, der er placeret udenfor forløbsprocessen i figuren tilbydes af FU
 
 | Proces | Formål | Anvendelse | FHIRressourcer |
 | --- | --- | --- | --- |
-| Vedligehold af terminologi og koder | Sikre ensartede, veldefinererede og versionerede begreber og koder, herunder diagnoser | Vedligehold varetages gennem service requests til FUT-S, der anvender brugergrænsefladen i Trifolia | V.alueSet CodeSystem |
-| Vedligehold af Careteams | Sikre at sundhedsfaglige medarbejdere kan arbejde sammen på tværs af organisatoriske grænser | Oprettelse og vedligehold af teams som kan indeholde medarbejdere fra såvel regioner, kommuner samt ydersektoren. Varetages af administrative medarbejdere gennem KAM | CareTeam |
-| Vedligehold af Plandefinitioner | Sikre effektivitet, kvalitet og ensartethed i definition af skabeloner for planer, som definerer borgerens aktiviteter på tværs af anvenderløsninger | Varetages af sundhedsmedarbejdere tilknyttet en anvenderløsning gennem KAM | PlanDefinition, ActivityDefinition |
-| Vedligehold af Spørgeskemaer | Sikre effektivitet, kvalitet og ensartethed i definition af spørgeskemaer for planer, som definerer borgerens aktiviteter på tværs af anvenderløsninger | Varetages af sundhedsmedarbejdere tilknyttet en anvenderløsning gennem KAM | Questionnaire |
-| Støtte til gennemførsel af aktiviteter | Sikre effektivitet, kvalitet og ensartethed i gennemførsel af de aktiviteter, der indgår i borgerens planer på tværs af anvenderløsninger | Varetages af infrastrukturen på baggrund af præferencer sat | Communication CommunicationRequest Task |
-| Beslutningsstøtte for målinger | Støtte automatisering, kvalitet og ensartethed i kliniske vurderinger (herunder triagering) på baggrund af målinger fra de aktiviteter, der indgår i borgerens aktiviteter. | Definition af regler varetages af anvenderløsningen i form af udvikling af regler, der opbevares i FHIR Library. Afvikling varetages af FUT-Infrastrukturen , som på baggrund af borgerens aktiviteter og måledata producerer kliniske indtryk og opgaver, som anvenderløsningen præsenterer for de tilknyttede careteams. | FHIR Library ServiceRequest Measurement ClinicalImpression Task |
-| Deling af målinger til nationalt arkiv | Dele | Varetages af FUT Infrastrukturen på baggrund af FHIR data skabt og vedligeholdt af anvenderløsninger. |   |
-| Planlægning og afholdelse af videomøder | Sikre effektiv kommunikation mellem borger og sundhedspersonale | Varetages af anvenderløsning gennem FUT Microservice | Appointment |
-| Vedligehold persondata i FUT | Sikre korrekte og opdaterede grunddata om borgere | Stamdata importeres af FUT-I i form af cpr-data | Person Patient RelatedPerson |
+| Vedligehold af terminologi og koder | Sikre ensartede, veldefinererede og versionerede begreber og koder, herunder diagnoser | Vedligehold varetages gennem service requests til FUT-S, der anvender brugergrænsefladen i Trifolia. Se [brugervejledning](https://docs.ehealth.sundhed.dk/latest-released/trifolia/usermanual/index.html).| ValueSet CodeSystem |
+| Vedligehold af Careteams | Sikre at sundhedsfaglige medarbejdere kan arbejde sammen på tværs af organisatoriske grænser | Oprettelse og vedligehold af teams som kan indeholde medarbejdere fra såvel regioner, kommuner samt ydersektoren. Varetages af administrative medarbejdere gennem KAM. Se [brugervejledning](https://fut-portal.rm.dk/spaces/FSD/pages/23101475/Oprettelse+af+Care+teams) | CareTeam |
+| Vedligehold af Plandefinitioner | Sikre effektivitet, kvalitet og ensartethed i definition af skabeloner for planer, som definerer borgerens aktiviteter på tværs af anvenderløsninger | Varetages af sundhedsmedarbejdere tilknyttet en anvenderløsning gennem KAM. Se [brugervejledning](https://fut-portal.rm.dk/spaces/FSD/pages/23101650/Oprettelse+af+planer).    | PlanDefinition, ActivityDefinition |
+| Vedligehold af Spørgeskemaer | Sikre effektivitet, kvalitet og ensartethed i definition af spørgeskemaer for planer, som definerer borgerens aktiviteter på tværs af anvenderløsninger | Varetages af sundhedsmedarbejdere tilknyttet en anvenderløsning gennem KAM. Se [brugervejledning](https://fut-portal.rm.dk/spaces/FSD/pages/23101506/Oprettelse+af+sp%C3%B8rgeskema). | Questionnaire |
+| Støtte til gennemførsel af aktiviteter | Sikre effektivitet, kvalitet og ensartethed i gennemførsel af de aktiviteter, der indgår i borgerens planer på tværs af anvenderløsninger | Varetages af infrastrukturen på baggrund af præferencer for kommunikation for sundhedspersonale og borgere sat af anvender.  | Communication CommunicationRequest Task. [Dokumentation](https://ehealth-dk.atlassian.net/wiki/spaces/EDTW/pages/2415034369/Controlling+Creation+of+Messages).|
+| Beslutningsstøtte for målinger | Støtte automatisering, kvalitet og ensartethed i kliniske vurderinger (herunder triagering) på baggrund af målinger fra de aktiviteter, der indgår i borgerens aktiviteter. | Definition af regler varetages af anvenderløsningen i form af udvikling af regler, der opbevares i FHIR Library. Afvikling varetages af FUT-Infrastrukturen , som på baggrund af borgerens aktiviteter og måledata producerer kliniske indtryk og opgaver, som anvenderløsningen præsenterer for de tilknyttede careteams.  | FHIR Library ServiceRequest Measurement ClinicalImpression Task. [Dokumentation](https://ehealth-dk.atlassian.net/wiki/spaces/EDTW/pages/2550661140/Automated+Processing#AutomatedProcessing-AutomatedProcessingofSubmittedMeasurement)   |
+| Deling af målinger til nationalt arkiv | Dele | Varetages af FUT Infrastrukturen på baggrund af FHIR data skabt og vedligeholdt af anvenderløsninger. | [Dokumentation](https://ehealth-dk.atlassian.net/wiki/spaces/EDTW/pages/2698903576/Sharing+through+Registering+Documents+in+National+Document+Sharing+Infrastructure)   |
+| Planlægning og afholdelse af videomøder | Sikre effektiv kommunikation mellem borger og sundhedspersonale | Varetages af anvenderløsning gennem FUT Microservice | Appointment [Dokumentation](https://ehealth-dk.atlassian.net/wiki/spaces/EDTW/pages/663945265/Video+endpoint+federation+VDX) |
+| Vedligehold persondata i FUT | Sikre korrekte og opdaterede grunddata om borgere | Stamdata importeres af FUT-I i form af cpr-data | Person Patient RelatedPerson [Dokumentation](https://ehealth-dk.atlassian.net/wiki/spaces/EDTW/pages/3553820678/Synchronization+of+National+patient+data) |
 
 
 
 ## Opret Plandefinition
 
-Som det fremgår af  er borgerens planen for borgerens forløb en tilpasning af en planskabelon. Skabelonerne har til formål at sikre kvaliteten i de planer, borgerne konkret tildeles. I Skabelonerne angives derfor mål og rammer for brugen af planen, såvel som instrukser for, hvilke aktiviteter, der skal udføres. En aktivitet er således karakteriseret ved hvad der skal udføres, hvornår den skal udføres og hvordan det relaterer til de mål og rammer, der er indeholdt i planen. Selvom processen med at definere planskabeloner er understøttet af brugergrænsefladen i KAM er det alligevel værd at gennemgå hvordan opbygning sker for at understøtte forståelsen af, hvordan planskabelonerne senere bruges. Det skal bemærkes, at den proces, der illustreres herunder er logisk opbygget med henblik på at forstå FHIR ressourcerne og ikke følger det brugervendte flow i KAM. Underprocesserne i definitionen af en planskabelon beskriver i det følgende afsnit.
+Borgerens planer tager udgangspunkt i tilpasning af en planskabelon. Skabelonerne har til formål at sikre kvaliteten i de planer, borgerne konkret tildeles. I Skabelonerne angives derfor mål og rammer for brugen af planen, såvel som instrukser for, hvilke aktiviteter, der skal udføres. En aktivitet er således karakteriseret ved hvad der skal udføres, hvornår den skal udføres og hvordan det relaterer til de mål og rammer, der er indeholdt i planen.
+
+![Billede](images/proces-plan.png)
+
+Selvom processen med at definere planskabeloner er understøttet af brugergrænsefladen i KAM er det alligevel værd at gennemgå hvordan opbygning sker for at understøtte forståelsen af, hvordan planskabelonerne senere bruges. Det skal bemærkes, at den proces, der illustreres herunder er logisk opbygget med henblik på at forstå FHIR ressourcerne og ikke følger det brugervendte flow i KAM. Underprocesserne i definitionen af en planskabelon beskriver i det følgende afsnit.
 
 I nedenstående tabel beskrives formål, anvendelse og de involverede FHIR ressourcer for oprettelse af plandefinitioner, herunder aktivitetsdefinitioner og spørgeskemaer.
 
 | Underproces | Formål | Anvendelse | Involverede FHIR Ressourcer |
 | --- | --- | --- | --- |
-| Definer mål og rammer | Fastlægge hvem og hvad planen skal adressere og hvilke artifakter, der skal anvendes i den | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | PlanDefinition UsageContext Goal Subject Typer Library DocumentReference |
-| Definer struktur og afvikling | Fastlægge den overordnede struktur for aktiviteter i plandefintionen, herunder rækkefølge for triggere. | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | Action ActionTrigger Role |
-| Specificer aktiviteter | Udspecificere hvornår og hvordan aktiviteter skal udføres | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | ActivityDefinition Questionnaire ReferenceRange Timing Typer |
+| Definer mål og rammer | Fastlægge hvem og hvad planen skal adressere og hvilke artifakter, der skal anvendes i den | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM og danner derefter grundlag for tilrettede planer (CarePlan) for borgere.| [PlanDefinition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition.html) [UsageContext](https://hl7.org/fhir/R4/metadatatypes.html#UsageContext) Goal Subject Typer [Library](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-library.html) [DocumentReference](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-documentreference.html) |
+| Definer struktur og afvikling | Fastlægge den overordnede struktur for aktiviteter i plandefintionen, herunder rækkefølge for triggere. | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | [action](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition-definitions.html#PlanDefinition.action) [ActionTrigger](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-actionTrigger.html) Role |
+| Specificer aktiviteter | Udspecificere hvornår og hvordan aktiviteter skal udføres | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM |[ActivityDefinition ](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-activitydefinition.html) [Questionnaire](https://hl7.org/fhir/R4/questionnaire.html) ReferenceRange Timing Typer |
 | Aktivér plan | Publicere planen til brug | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM |   |
 
 
@@ -394,6 +401,8 @@ I nedenstående tabel beskrives formål, anvendelse og de involverede FHIR resso
 ## Forløbsoprettelse
 
 Oprettelse af et telemedicinsk forløb foretages af en sundhedsmedarbejder (kliniker) og består i at indhente samtykke fra borgeren, skabe selve forløbet med diagnose, som er et element, der udpeger en såkaldt Condition, som er et valueset, der består af diagnosekoder og borgertilstande. Derefter tilpasses og tildeles en eller flere planer til forløbet. Endelig aktiveres forløbet så omsorgen for borgeren kan begynde.
+![Billede](images/proces-forløb-opret.png)
+
 
 Oprettelse af forløb med tilknytning af plan
 
@@ -411,6 +420,8 @@ Underprocesserne i oprettelsen af et forløb beskrives i den følgende tabel.
 ## Aktivitet, Måling og Opfølgning
 
 Den overordnede arbejdsgang for forløb tager udgangspunkt i, at borgeren eller en kliniker udfører de aktiviteter, der indgår i de individuelle planer for borgeren. Aktiviteterne vil ofte være gentagne (periodiske), så de skal udføres på bestemte ugedage og klokkeslæt. Selve udførelsen vil typisk bestå af besvarelse af spørgeskemaer, tekstuelle tilkendegivelser om borgerens helbred og velbefindende eller aflæsning af tal-værdier for eksempelvis blodtryk, puls eller iltmætning. 
+![Billede](images/proces-akt-mål-opf.png)
+
 
 Anvenderløsningen præsenterer typisk aktiviteterne for brugeren, som derefter kan udføre dem og indsende resultaterne. I FUT-I omtales disse resultater som måleresultater (measurements),der består af et antal FHIR ressourcer. Disse refererer til aktiviteten og indeholder tidspunkt for indsendelsen samt tidsperioden, som måleresultatet gælder for.
 
@@ -424,7 +435,7 @@ Underprocesserne beskrives i den følgende tabel.
 
 | Proces | Formål | Anvendelse | Involverede FHIR Ressourcer |
 | --- | --- | --- | --- |
-| Borgeraktivetet | Give borger eller sundhedspersonale overblik over udestående aktiviteter, udføre disse og indsende måleresultatet | Anvendersløsningen henter overblik over borgerens aktiviteter og indsendte måleresultater for en given periode. Heraf kan anvenderløsningen udlede både allerede udførte og ikke udførte aktiviteter. På baggrund heraf kan den udstille muligheden for at vælge, hvilken aktivitet borgeren skal udføre, samt hvilket tidsrum måleresultatet skal gælde for. Dette tidsrum vil ofte være stærkt knyttet til det tidsrum aktiviteten er knyttet til. Eksempelvis kan det give mening at besvare et spørgeskema på en given dag, men besvare det på baggrund af, hvordan borgeren havde det dagen før.<br> Når aktiviteten er udført indsendes resultatet, hvorefter eventuel beslutningsstøtte bliver afviklet automatisk | Borgerens aktiviteter hentes med FHIR operationen [Get Patient Procedures](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-get-patient-procedures.html)<br><br>Måleresultateter indsendes med FHIR operationen submit-measurement, som konkret tager mod et FHIR Bundle bestående af: <br><br><ul> <li>[ Observation](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-observation.html), der kan indeholde tal- og teksværdier</li><li>[Media](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-media.html), som kan indeholde billedmateriale </li><li>[QuestionnaireResponse](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-questionnaireresponse.html), der er en besvarelse af et spørgeskema </li><li>[Provenance](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-provenance.html), der kan beskriver, hvordan måleresultatet er blevet til</li></ul> |
+| Borgeraktivetet | Give borger eller sundhedspersonale overblik over udestående aktiviteter, udføre disse og indsende måleresultatet | Anvendersløsningen henter overblik over borgerens aktiviteter og indsendte måleresultater for en given periode. Heraf kan anvenderløsningen udlede både allerede udførte og ikke udførte aktiviteter. På baggrund heraf kan den udstille muligheden for at vælge, hvilken aktivitet borgeren skal udføre, samt hvilket tidsrum måleresultatet skal gælde for. Dette tidsrum vil ofte være stærkt knyttet til det tidsrum aktiviteten er knyttet til. Eksempelvis kan det give mening at besvare et spørgeskema på en given dag, men besvare det på baggrund af, hvordan borgeren havde det dagen før.<br> Når aktiviteten er udført indsendes resultatet, hvorefter eventuel beslutningsstøtte bliver afviklet automatisk | Borgerens aktiviteter hentes med FHIR operationen [Get Patient Procedures](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-get-patient-procedures.html)  <br><br>Måleresultateter indsendes med FHIR operationen submit-measurement, som konkret tager mod et FHIR Bundle bestående af: <br><br><ul> <li>[ Observation](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-observation.html), der kan indeholde tal- og teksværdier</li><li>[Media](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-media.html), som kan indeholde billedmateriale </li><li>[QuestionnaireResponse](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-questionnaireresponse.html), der er en besvarelse af et spørgeskema </li><li>[Provenance](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-provenance.html), der kan beskriver, hvordan måleresultatet er blevet til</li></ul> |
 | Beslutningsstøtte for måleresultater | Yde støtte til beslutninger på baggrund af borgerens målinger |  Ved indsendelse af måleresultater for aktiviteter i borgerens individuelle plan bliver de regler, som er specificeret i plandefinitionen, som er knyttet til borgerens individuelle plan afviklet af FUT-I.<br><br> | Infrastrukturen identificerer hvilke regler, der skal afvikles ud fra definitionen i Library. Resultatet af afviklingen afhænger af reglener, men kan være:<br><br> <ul><li>[Task](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-task.html) </li><li>[ClinicalImpression](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-clinicalimpression.html)  </li></ul> |
 | Opfølgning |  Afklaring af nødvendige handlinger på baggrund af borgerens måleresultater og beslutningsstøtte | Sundhedspersonale kan via anvenderløsningen danne sig et overblik over borgerens tilstand og udviklingen i samme. Med afsæt heri kan sunhedspersonalet beskrive yderligere indtryk af borgeren, indkalde borgeren til en videokonsultation eller ændre i borgerens plan. |  Anvenderløsningen kalder [Search Measurement](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-search-measurements.html), som giver overblik over målinger. <br><br> Endvidere anvenderløsningen fremsøge og oprette [Task](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-task.html). Bemærk at der allerede kan være oprettet task ved afvikling af beslutningsstøtte. |
 | Invalidering af måleresultat | Fejlmarkere et måleresultat og understøtte indsendelse af nyt|  I tilfælde hvor det konstateres, at der er indsendt et forkert måleresultat understøtter FUT-I at disse kan markeres som fejlagtige. Herved kan en ny måling udføres samtidig med, at det fejlagtige måleresultat stadig eksisterer som grundlag for sporbarhed og optimering.  | Anvenderløsningen kalder [Invalidate / Retract Invalidation of a Measurement](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition-ClinicalImpression-t-set-measurement-validity.html)   |
@@ -434,6 +445,8 @@ Underprocesserne beskrives i den følgende tabel.
 ## Støtte til Gennemførsel af Aktiviteter
 
 FUT-I kan udsende forskellige typer af kommunikation i forbindelse med, at der indtræffer hændelser - enten baseret på tid eller udførsel af en egentlig handling. I dette afsnit beskrives den kommunikation, som understøtter gennemførsel af aktiviteter.
+
+![Billede](images/proces-støtte.png)
 
 Underprocesserne beskrives i den følgende tabel.
 
@@ -460,10 +473,3 @@ Miljøer
 
 
 
-## Billeder
-
-![Billede](images/image3.png)
-
-![Billede](images/image6.png)
-
-![Billede](images/image7.png)
