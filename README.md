@@ -105,119 +105,69 @@ I de følgende afsnit introduceres hovedprocesserne for forretningskapabiliteter
 
 ## Patienter og Pårørende
 
-Vedligehold af borgeres data, som støttes af
+Denne kapabilitet stiller de grundlæggende services til rådighed, som gør det muligt at vedligeholde borgernes stamdata og sikre, at informationen altid er korrekt på tværs af systemlandskabet. Forretningsarkitekter kan planlægge processer med sikkerhed for, at relevante oplysninger hentes automatisk gennem integrationer til eksterne data- og services, herunder import af CPR-data.
 
-* Integration til eksterne data og services: Import af data fra CPR
-
-* Vedligehold af pårørende-relationer
-
-* Uddelegering af fuldmagt til pårørende
-
-* Udsendelse af beskeder til borgere, som støttes af
-
-* Kommunikation med borgere: Afsendelse via NemSMS
+Kapabiliteten understøtter desuden modellering af relationer til pårørende samt delegering af fuldmagter, så det er tydeligt, hvem der må agere på borgerens vegne. Endelig kan anvenderløsninger sende målrettede beskeder til borgerne via NemSMS, hvilket giver en robust kommunikationskanal til påmindelser og øvrig dialog.
 
 ## Aktører og Ansvar
 
-Vedligehold af Organisatoriske data, som støttes af
+Kapabiliteten giver et konsolideret billede af de organisationer, roller og ansvar, som indgår i et tværsektorielt behandlingsforløb. Via integrationer til kilder som SOR, Fælleskommunale Organisationssystem og Yderregisteret holdes data opdateret uden manuelle processer, hvilket gør det nemt for forretningsarkitekter at beskrive, hvem der leverer hvilke ydelser.
 
-* Integration til eksterne data og services: Blandt andet SOR, Fælleskommunale Organisationssystem og Yderregisteret
-
-* Vedligehold af Careteams bestående af sundhedspersonale på tværs af organisationer, der varetager omsorg for borgere
+Det bliver samtidig muligt at definere og vedligeholde careteams på tværs af regioner, kommuner og praksissektor. Dermed kan ansvarsfordelingen tydeligt indarbejdes i modeller og processer, så borgeren oplever et koordineret forløb.
 
 ## Beslutningsstøtte
 
-Definition af forretningslogik for beslutningsstøtte, eksempelvis til triagering
-
-Afvikling af forretningslogikken på baggrund af data fra borgeres aktiviteter og oprettelse af FHIR-ressourcer, der repræsenterer beslutningsstøtte
+Kapabiliteten stiller et fælles lag til rådighed for at beskrive og eksekvere beslutningslogik, eksempelvis triagering af borgere. Forretningslogikken bindes tæt til borgernes data, så hver beslutning bygger på opdaterede målinger og aktiviteter, og resultatet registreres som FHIR-ressourcer, der kan deles og genbruges på tværs af løsninger.
 
 ## Planer, Aktiviteter og Spørgeskemaer
 
-Vedligehold af plandefinitioner, der beskriver hvordan omsorgen konkret udføres for en konkret diagnose, herunder inkluderede aktiviteter og anvendelse af beslutningsstøtte
+Kapabiliteten gør det muligt at opstille plandefinitioner, der detaljeret beskriver, hvordan omsorg og behandling udføres for en specifik diagnose. Forretningsarkitekter kan dermed modellere aktiviteter, afhængigheder og støttefunktioner, herunder hvordan beslutningsstøtten skal inddrages.
 
-Vedligehold af aktivitetsdefinitioner, der kan indgå i en eller plandefinitioner (herunder spørgeskemaer) samt grænseværdier for aktiviteterne (f.eks. højeste tilladte puls) til brug under afvikling af beslutningsstøtte
-
-Vedligehold af spørgeskemadefinitioner, der kan indgå i en eller flere aktivitetsdefinitioner
+Tilknyttede aktivitetsdefinitioner og spørgeskemaer kan genbruges på tværs af planer, og der kan beskrives relevante grænseværdier, såsom acceptable pulsintervaller. Det skaber et biblioteks-lignende fundament, hvor standardiserede elementer kan kombineres og tilpasses til den enkelte borger.
 
 ## Koder og terminologi
 
-Vedligehold af kodesæt og terminologi, som understøttes af
+Kapabiliteten sikrer en fælles struktur for kodesæt og terminologier ved at automatisere importen af eksempelvis diagnoser og borgernes tilstande fra eksterne kilder. Forretningsarkitekter kan derfor bygge processer på et konsistent begrebsapparat, som vedligeholdes ét sted.
 
-* Integration til eksterne data og services: Blandt andet import af diagnoser og borgertilstande
-
-* Definition af værdisæt, på baggrund af kodesæt, eksempelvis
+På den måde bliver det enkelt at definere værdisæt og andre afledte klassifikationer, der kan bruges i både brugerflader og beslutningslogik uden at miste sammenhængen til de officielle standarder.
 
 ## Forløb
 
-* Oprettelse og vedligehold af telemedicinsk forløb
+Kapabiliteten samler arbejdet med telemedicinske forløb, så nye forløb kan oprettes, vedligeholdes og afsluttes med en klar reference til de tilhørende planer. Forretningsarkitekter kan tilpasse planerne til den enkelte borger, samtidig med at standardelementer genbruges for at sikre kvalitet og ensartethed.
 
-* Vedligehold af en eller flere planer for omsorgen i forløbet på baggrund af plandefinitioner med tilpasninger til den enkelte borger
-
-* Udsendelse af påmindelser om forestående aktiviteter til borgere, som støttes af
-
- * Kommunikation med borgere
-
-* Udførsel af aktiviteter og opfølgning på disse, blandt andet på baggrund af afvikling af beslutningsstøtte
-
-* Oprettelse af opfølgningsopgaver til Careteams baseret på afvikling af beslutningsstøtte
+Når forløbene afvikles, understøttes borgernes aktiviteter af automatiske påmindelser og kommunikation via de dedikerede services, og beslutningsstøtten kan skabe opfølgningsopgaver til careteams. Det giver et sammenhængende flow fra planlægning til udførelse og opfølgning.
 
 ## Adgange og rettigheder
 
-Vedligehold af samlet hybrid brugerbase baseret på
+Kapabiliteten stiller en samlet hybrid brugerbase til rådighed, hvor borgere og pårørende logger ind via MitID, mens sundhedspersonale anvender SEB. Forretningsarkitekter kan dermed planlægge løsninger, der tilgodeser både borgerrettede flows og faglige arbejdsgange uden at gå på kompromis med sikkerheden.
 
-Adgang for borgere og pårørende via MitID
-
-Adgang for sundhedspersonale via SEB, herunder brugernes roller og dataafgrænsninger
-
-Adgange for øvrige aktører, herunder systemer via lokal brugerdatabase
-
-Adgang baseret på
-
-Roller, der beskriver hvad en bruger må udføre og kan tildeles brugeren i den hybride brugerbase
-
-Dataafgrænsninger, der beskriver hvilke data (primært forløbsdata) en bruger må se
-
-Auditlogning af brugeres anvendelse af systemet
+Roller, dataafgrænsninger og øvrige adgangsregler administreres centralt, og adgangen for eksterne systemer kan håndteres via lokale brugeropslag. Samtidig sikrer auditlogning fuld sporbarhed, så compliance- og sikkerhedskrav dokumenteres.
 
 ## Integration til eksterne services
 
-Integrationerne foretages gennem NSP. De primære anvendelser er beskrevet som støtte til de øvrige processer.
+Kapabiliteten koordinerer de eksterne integrationer gennem NSP og giver en struktureret ramme for at tilslutte nye services. De øvrige processer kan derfor forudsætte, at nødvendige data og funktioner er tilgængelige på en sikker og standardiseret måde.
 
 ## Deling af data med eksterne aktører
 
-Deling af forløbsdata, som støttes af
-
-Deling af data til eksterne aktører: KIH
+Kapabiliteten gør det muligt at dele forløbsdata med autoriserede eksterne aktører, eksempelvis KIH. Forretningsarkitekter kan forme processer, hvor data distribueres på tværs af organisationer, samtidig med at regler for adgang og sporbarhed respekteres.
 
 ## Kommunikation med borgere
 
-De primære anvendelser er beskrevet som støtte til de øvrige processer
+Kapabiliteten leverer de kanaler, der bruges i andre processer til beskeder, påmindelser og dialog med borgerne. Den kan dermed indgå som et genanvendeligt element, når forretningsarkitekter planlægger borgerrettede kontaktpunkter.
 
 ## Analyse og Rapportering (under udvikling)
 
-Overblik over brug gennem dashboards i business intelligence
-
-Udtræk af data til anvendelse udenfor data platformen gennem API med understøttelse af restriktioner på og maskering af data
+Kapabiliteten, som er under udvikling, fokuserer på at give indsigt i anvendelsen af FUT Infrastrukturen. Den omfatter både dashboards, der giver et aktuelt overblik, og API-adgang til data med mulighed for at maskere og begrænse information, så den kan deles sikkert udenfor data platformen.
 
 ## Drift af infrastrukturen og anvenderløsninger, der understøttes af tværgående
 
-DevOps processer via repositories og pipelines
+Kapabiliteten skaber de driftsprocedurer og tekniske mekanismer, der holder både infrastrukturen og anvenderløsningerne i gang. DevOps-processer og pipelines understøtter kontinuerlige releases, mens containerisation sikrer, at løsninger kan skaleres og isoleres efter behov.
 
-skalering og isolering via containerization
-
-udstilling af services via service mesh
-
-sporing og måling af kald via observability
-
-monitorering til understøttelse af stabil drift og hurtig problemløsning
+Service mesh, observability og monitorering gør det muligt at følge trafikken, reagere hurtigt på hændelser og dokumentere stabil drift, så forretningsarkitekter trygt kan planlægge løsninger med høje oppetidskrav.
 
 ## Governance, Risc og Compliance
 
-Videreudvikling og tilpasning af FUT Infrastrukturen efter behov
-
-Opfølgning på drift og kontrakter
-
-Anvendelse af infrastrukturen og dens data
+Kapabiliteten sætter rammerne for, hvordan FUT Infrastrukturen videreudvikles og tilpasses, så nye behov kan imødekommes uden at kompromittere kvalitet eller sikkerhed. Governanceprocesserne følger op på drift, kontrakter og anvendelsen af data, hvilket giver den nødvendige dokumentation i forhold til lovgivning og interne politikker.
 
 # Applikationsarkitektur
 
@@ -241,51 +191,27 @@ Trifolia, som tilbyder vedligehold af terminologi, kodesystemer og værdisæt
 
 ### FUT-I Microservices
 
-Tilbyder øvrige applikationsvendte kapabiliteter fra forretningsarkitekturen gennem:
+Lagets mikrotjenester realiserer de forretningskapabiliteter, som anvenderløsninger har behov for, og eksponerer dem gennem standardiserede FHIR-profiler. Arkitekter kan designe integrationer omkring REST/JSON-endpoints, der håndterer både læsning og registrering af kliniske data uden behov for proprietære adaptere.
 
-Adgang til FHIR-baserede mikrotjenester via REST/JSON
-
-Brug af standardiserede FHIR-profiler og -ressourcer
-
-Understøttelse af søgning med parametre, filtrering, paging og conditional updates
+Tjenesterne understøtter parametriserede søgninger, filtrering, paging og conditional updates, hvilket gør det muligt at modellere avancerede dataflows samtidig med, at oprindelig kontekst bevares. Det giver et forudsigeligt og skalerbart fundament for applikationslogik på tværs af leverandører.
 
 ### Driftsservices
 
-Anvender Kubernetes samt tilhørende værktøjer til monitoring og fejlhåndtering
+Driftslaget ligger på Kubernetes og omfatter både FUT-Infrastrukturen og de tilknyttede anvenderløsninger. Arkitekter kan dermed planlægge deploymentstrategier på et fælles cluster, hvor container orchestration, autoskalering og rolling updates håndteres gennem standardiserede værktøjer.
 
-Inkluderer både FUT-Infrastrukturen og anvenderløsninger
-
-Anvender container orchestration, skalering og rolling updates
+Monitoring og fejlhåndtering er integreret i platformen, så driftsopgaver kan automatiseres og observabilitet sikres fra første dag. Det forkorter time-to-market og reducerer behovet for at etablere parallelle driftsmiljøer.
 
 ### Platformservices
 
-Istio Service Mesh
+Service mesh-laget bygger på Istio og sikrer, at kald mellem mikrotjenester rutes korrekt, beskyttes og overvåges. Applikations- og teknologiarkitekter kan udnytte den indbyggede politikstyring til at gennemtvinge kryptering, rate limiting og adgangsbegrænsninger uden at ændre i selve tjenesterne. Observabilitet leveres gennem fælles telemetri, hvilket gør det lettere at diagnosticere performanceproblemer på tværs af miljøer.
 
-Gennemtvinger sikkerhed i samspil med Keycloak IdP og FUT-I Microservices
-
-Router kald til den korrekte service i Kubernetes
-
-Adgangsbegrænsning og observabilitet.
-
-Keycloak  IdP
-
-Anvendes til brugerautentifikation (OIDC)
-
-Anvenderløsninger får et JWT-token, som anvendes ved adgang til API’er
-
-validerer token og håndhæver adgang baseret på scopes og tilknytning til fx CareTeams
-
-Brugere kan være sundhedsprofessionelle eller administrative medarbejdere (via SAML federation) eller patienter (via MitID integration)
-
-Audit og event logning
+Identitet og adgang styres af Keycloak, der fungerer som IdP med OIDC og understøtter federation via SAML samt MitID-integration til borgere. Keycloak udsteder JWT-tokens, som anvendes mod API’erne, og validerer scopes og teamtilknytninger ved hvert kald. All aktivitet registreres i audit- og event-logs, så sikkerhedshændelser kan spores og dokumenteres.
 
 ### DevOps Services
 
-CI/CD pipeline via GitLab
+DevOps-kæden er centreret omkring GitLab CI/CD, som automatiserer build, test og deployment. Artefakter gemmes i Harbor, så images kan signeres og versionsstyres, inden de rulles ud i Kubernetes.
 
-Image hosting i Harbor
-
-Helm til deployment orchestration.
+Helm orkestrerer installationerne og gør det muligt at parameterisere miljøer på tværs af regioner og leverandører. Arkitekter kan derfor beskrive ønsket tilstand én gang og lade pipeline håndtere udrulningen helt frem til produktion.
 
 ## Anvenderløsninger
 
@@ -293,40 +219,22 @@ En anvenderløsninger er en containeriserede webklient med tilhørende backend-k
 
 ![Billede](images/anvender-teknologi.png)
 
-
 I de følgende afsnit beskrives kravene til anvenderløsningens forskellige dele.
 
 ### Frontend
 
-Udvikling og vedligeholdelse af webbrugergrænsefladen.
-
-Håndtering af brugerinteraktion, session og adgangsforhold via JWT.
-
-Integration af login-flow og viderestilling til Keycloak (OpenID Connect).
+Frontendlaget udstiller den webbaserede brugeroplevelse og orkestrerer interaktioner med platformens services. Applikationsarkitekter kan modellere komponenter, der håndterer sessioner gennem JWT’er og sikrer, at brugerens kontekst bevares på tværs af sidelæsninger. OIDC-flowet mod Keycloak integreres direkte i brugerinterfacets routing, så login, tokenfornyelse og logout håndteres uden separate klienter.
 
 ### Backendkomponent
 
-Er en containeriseret backend, som udstiller services via et web-baseret interface
-
-Validerer JWT tokens og vælger en brugerkontekst ud fra de roller og data-adgange tokenet indeholder
-
-Anvender API-kald for at tilgå FHIR-tjenester
-
-Implementerer forretningslogik, regler (fx Drools) og caching.
-
-Kommunikerer med øvrige anvenderspecifikke mikrotjenester
+Backendkomponenten kører som en containeriseret service og udstiller et API, der operationaliserer forretningslogikken. Arkitekter beskriver her, hvordan JWT’er valideres, scopes kontrolleres, og brugerens kontekst omsættes til målrettede FHIR-kald. Laget håndterer regler (fx Drools), caching og integration til øvrige mikrotjenester, så applikationen kan reagere på både synkrone og asynkrone hændelser.
 
 ### Containerization, Infrastructure-as-Code og Deployment
 
-Vedligeholdelse af Helm Chart inkl. værdikonfiguration (values.yaml) per miljø
+Arkitekturen beskrives som kode gennem Helm charts, hvor miljøspecifikke værdier (values.yaml) styrer konfigurationen. Images publiceres i Harbor og rulles ud via GitLab CI/CD, der automatiserer build, test og release. Kubernetes-artefakter, herunder Service og VirtualService, versioneres sammen med løsningen, så netværkstopologi, trafikregler og afhængigheder kan testes og promoveres entydigt mellem miljøerne.
 
-Udgivelse af images til container registry (Harbor)
+Detaljeret information om kravene til at bygge en anvenderløsning findes [her](https://ehealth-dk.atlassian.net/wiki/spaces/EDTW/pages/76316673/Developing+on+the+eHealth+Platform). 
 
-CI/CD pipelines (GitLab) til automatiseret build, test og deployment
-
-Udarbejdelse og test af Kubernetes-specifikke artefakter som Service og VirtualService
-
-Link til "sådan bygger du ..."
 
 # Processer
 
@@ -389,14 +297,12 @@ I nedenstående tabel beskrives formål, anvendelse og de involverede FHIR resso
 
 | Underproces | Formål | Anvendelse | Involverede FHIR Ressourcer |
 | --- | --- | --- | --- |
-| Definer mål og rammer | Fastlægge hvem og hvad planen skal adressere og hvilke artifakter, der skal anvendes i den | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM og danner derefter grundlag for tilrettede planer (CarePlan) for borgere.| [PlanDefinition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition.html) [UsageContext](https://hl7.org/fhir/R4/metadatatypes.html#UsageContext) Goal Subject Typer [Library](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-library.html) [DocumentReference](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-documentreference.html) |
-| Definer struktur og afvikling | Fastlægge den overordnede struktur for aktiviteter i plandefintionen, herunder rækkefølge for triggere. | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | [action](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition-definitions.html#PlanDefinition.action) [ActionTrigger](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-actionTrigger.html) Role |
-| Specificer aktiviteter | Udspecificere hvornår og hvordan aktiviteter skal udføres | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM |[ActivityDefinition ](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-activitydefinition.html) [Questionnaire](https://hl7.org/fhir/R4/questionnaire.html) ReferenceRange Timing Typer |
+| Definer mål og rammer | Fastlægge hvem og hvad planen skal adressere og hvilke artifakter, der skal anvendes i den | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM og danner derefter grundlag for tilrettede planer (CarePlan) for borgere.| En [PlanDefinition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition.html) referer en [UsageContext](https://hl7.org/fhir/R4/metadatatypes.html#UsageContext), som beskriver hvilke anvenderløsninger, planen er tiltænkt. Gennem elementet [addresses](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition-definitions.html#PlanDefinition.goal.addresses) fremgår hvilke [Condition](https://hl7.org/fhir/R4/valueset-condition-code.html)s planen er tiltænkt. Via reference til [Library](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-library.html) er det angivet hvilke beslutningsstøtte-biblioteker, der kan anvendes for resultatet af aktiviteterne. Endelig angiver [DocumentReference](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-documentreference.html) dokumenter, der kan understøtte gennemførsel af planen. |
+| Definer struktur og afvikling | Fastlægge den overordnede struktur for aktiviteter i plandefintionen, herunder rækkefølge for triggere. | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | I plandefinitionens [action](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition-definitions.html#PlanDefinition.action) element refereres de aktitivitieter i form af [ActivityDefinition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-activitydefinition.html)s eller andre plandefinitioner (underplaner), som indgår i planen. På actvity elementet kan der også angives [ActionTrigger](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-actionTrigger.html)s, som specificerer rækkefølge og blandt andet sikrer, at beslutningsstøtte foretages efter måleresultater er afsendt. |
+| Specificer aktiviteter | Udspecificere hvornår og hvordan aktiviteter skal udføres | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM | De konkrete aktiviteter er beskrevet via [ActivityDefinition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-activitydefinition.html). Aktiviteten kan bestå i at skulle måle noget (producere en [Observation]()), gennemføre et spørgeskema, [Questionnaire](https://hl7.org/fhir/R4/questionnaire.html) (producere et [QuestionnaireResponse]()) eller at tage et foto (producere et [Media]()). Der kan også angives grænseværdier gennem [ReferenceRange](), der benyttes i beslutningsstøtte til at afgøre, om der skal oprettes en opgave eller kommunikation til sundhedspersonalet på baggrund af de producererede  måleresultater. Hvornår og hvor ofte aktiviteten skal udføres angives gennem elementet [timing](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-activitydefinition-definitions.html#ActivityDefinition.timing[x])  |
 | Aktivér plan | Publicere planen til brug | Varetages af sundhedsmedarbejder tilknyttet en anvenderløsning gennem KAM |   |
 
-
-
-.... Reference til vertical migration. ...
+Plandefinitioner kan udlæses fra et miljø og indlæses på andre, hvorved anvenderløsninger undgår at skulle oprette samme plan flere gange - med fare for inkonsistens. Derudover et det muligt at lave nye versioner af en plandefinition. Både udlæsning/indlæsning og oprettelse af nye versioner er beskrevet her: [PlanDefinition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-plandefinition.html)
 
 ## Forløbsoprettelse
 
@@ -410,10 +316,10 @@ Underprocesserne i oprettelsen af et forløb beskrives i den følgende tabel.
 
 | Proces | Formål | Anvendelse | Involverede FHIR Ressourcer |
 | --- | --- | --- | --- |
-| Indhent Samtykke | Sikre borgerens samtykke til forløbet | Indhentes af sundhedspersonale og dokumenteres gennem anvenderløsningen ved oprettelse af forløbet. | Consent |
-| Opret Forløb | Oprette et forløb for en borger med kendt diagnose og ansvar i inaktiv tilstand | Foretages af sundhedspersonale gennem anvenderløsningen. | som opretter en EpisodeOfCare med tilhørende Patient, Condition (gennem elementet diagnosis), Consent, Careteam og Organisation |
-| Tildel Planer | Oprette borgervendte planer med aktiviteter for forløbet | Foretages af sundhedspersonale gennem anvenderløsningen. Der kan tildeles planer | , som giver skaber en CarePlan med tilhørende Service Requests, der beskriver hvilke aktiviteter, borgeren skal udføre. Disse skabes ved tilpasning af en Plandefinition (med tilhørende ActivityDefinitions), som matcher en af forløbet Conditions. ReferenceRange og RerenceBase anvendes til at udtrykke grænse værdier for henholdsvis service requests og målet med careplanen. |
-| Aktivér Forløb | Aktivere forløbet | Når forløbet og dets planer er klar aktiveres det af sundhedspersonalet gennem anvenderløsningen. | EpisodeOfCare |
+| Indhent Samtykke | Sikre borgerens samtykke til forløbet | Indhentes af sundhedspersonale og dokumenteres gennem anvenderløsningen ved oprettelse af forløbet. | [Consent](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-consent.html) |
+| Opret Forløb | Oprette et forløb for en borger med kendt diagnose og ansvar i inaktiv tilstand | Foretages af sundhedspersonale gennem anvenderløsningen. | Anvenderløsningen opretter en [EpisodeOfCare](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-episodeofcare.html) gennem operationen [Create an EpisodeOfCare](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-create-episode-of-care.html). Der angives reference til [Patient](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-patient.html), [Condition](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-condition.html), [Consent](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-consent.html), [Careteam](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-careteam.html) og [Organization](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-organization.html).  |
+| Tildel Planer | Oprette borgervendte planer med aktiviteter for forløbet | Foretages af sundhedspersonale gennem anvenderløsningen. | Anvenderløsningen kalder [Create a careplan](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/OperationDefinition--s-apply.html) som giver skaber en [CarePlan](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-careplan.html) med tilhørende [ServiceRequests](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-servicerequest.html) ud fra en plandefinition. Hver servicerequest referer en activitydefinition og beskriver hvilke aktiviteter, borgeren eller sundhedsmedarbejderen skal udføre. [ReferenceRange](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-referenceRange.html) anvendes til at udtrykke grænseværdier for målinger på servicerequests. Derudover kan der sættes mål for careplanen gennem [Goal](https://build.fhir.org/ig/fut-infrastructure/implementation-guide/StructureDefinition-ehealth-goal.html), som så udpeger den servicerequest, som målopfyldelsen gælder.  |
+| Aktivér Forløb | Aktivere forløbet | Når forløbet og dets planer er klar aktiveres det af sundhedspersonalet gennem anvenderløsningen. |  |
 
 
 
@@ -470,6 +376,3 @@ query på tværs
 transactions
 
 Miljøer
-
-
-
